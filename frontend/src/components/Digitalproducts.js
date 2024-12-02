@@ -17,7 +17,7 @@ const products = [
   {
     icon: <LocalAtmRoundedIcon />,
     title: 'Michu Digital Lending',
-    description: 'Revolutionize the lending process with Michu, offering quick, secure digital loans tailored for everyone.',
+    description: 'Michu Digital Lending is an AI-powered platform that enables individuals and businesses to access credit seamlessly through an advanced credit scoring system.',
   },
   {
     icon: <PhoneIphoneRoundedIcon />,
@@ -26,23 +26,23 @@ const products = [
   },
   {
     icon: <AgricultureIcon />,
-    title: 'Farmpass',
-    description: 'Helping farmers access loans, weather updates, and market prices through a simple digital platform.',
+    title: 'ATM Banking Service',
+    description: 'ATM services provide easy access to funds, bill payments, and other banking services through automated teller machines.',
   },
   {
     icon: <AppSettingsAltRoundedIcon />,
-    title: 'CoopApp',
-    description: 'A feature-rich mobile app that empowers users to access and manage their cooperative services efficiently.',
+    title: 'OMNI CHANNEL',
+    description: 'AOmni Channel is a platform that integrates multiple channels (mobile, web, and others) into one seamless service for individuals and businesses..',
   },
   {
     icon: <BusinessCenterRoundedIcon />,
-    title: 'BusinessSuite',
-    description: 'An all-in-one solution for small businesses, offering financial tools, invoicing, and productivity features.',
+    title: 'Web Pay',
+    description: 'Web Pay is an innovative e-commerce platform offering hosted and plugin solutions for both businesses and customers.',
   },
   {
     icon: <ThumbUpAltRoundedIcon />,
-    title: 'Customer Success',
-    description: 'Helping businesses build strong relationships with customers by providing great tools for support and engagement.',
+    title: 'POS (Point of Sale) Services',
+    description: 'POS systems enable merchants to process card payments seamlessly at retail locations.',
   },
 ];
 
@@ -75,7 +75,7 @@ export default function DigitalProducts() {
             textAlign: { sm: 'left', md: 'center' },
           }}
         >
-          <Typography component="h2" variant="h4" gutterBottom>
+          <Typography sx={{color:"#00adef"}} component="h2" variant="h4" gutterBottom>
             Digital Products
           </Typography>
           <Typography variant="body1" sx={{ color: '#000' ,fontWeight: 'medium'}}>

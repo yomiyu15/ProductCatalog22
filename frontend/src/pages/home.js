@@ -8,7 +8,8 @@ import AppTheme from '../shared-theme/apptheme';
 import Testimonials from '../components/Products';
 import FAQ from '../components/faq';
 
-import Highlights from '../components/highlights';
+import Highlights from '../components/Digitalproducts';
+
 
 
 
