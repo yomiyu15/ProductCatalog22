@@ -65,9 +65,17 @@ const productCatalog = [
 
 const TableOfContents = ({ data }) => {
   return data.map((category, index) => (
-    <Accordion key={index} sx={{ mb: 1, borderRadius: 2, }}>
+    <Accordion
+      key={index}
+      sx={{ mb: 1, borderRadius: 2 }}
+      disableGutters={!category.subcategories} // Disable gutter for last level
+    >
       <AccordionSummary
-        expandIcon={<ExpandMoreIcon sx={{ color: '#00adef' }} />}
+        expandIcon={
+          category.subcategories ? (
+            <ExpandMoreIcon sx={{ color: '#00adef' }} />
+          ) : null
+        }
         sx={{
           backgroundColor: '#f1faff',
           '&:hover': { backgroundColor: '#e1f1fd' },
@@ -80,14 +88,17 @@ const TableOfContents = ({ data }) => {
           {category.name}
         </Typography>
       </AccordionSummary>
-      <AccordionDetails sx={{ backgroundColor: '#fafafa', padding: '8px 24px' }}>
-        <Box sx={{ pl: 2 }}>
-          {category.subcategories && <TableOfContents data={category.subcategories} />}
-        </Box>
-      </AccordionDetails>
+      {category.subcategories && (
+        <AccordionDetails sx={{ backgroundColor: '#fafafa', padding: '8px 24px' }}>
+          <Box sx={{ pl: 2 }}>
+            <TableOfContents data={category.subcategories} />
+          </Box>
+        </AccordionDetails>
+      )}
     </Accordion>
   ));
 };
+
 
 export default function ProductCatalog() {
   return (

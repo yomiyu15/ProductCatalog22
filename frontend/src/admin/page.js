@@ -215,7 +215,7 @@ const FolderManager = () => {
 
       {/* Right Side - Actions (Create Folder, Upload File) */}
       <Grid item xs={12} md={4}>
-      <Paper elevation={3} style={{ padding: '36px', borderRadius: '10px', backgroundColor: '#f5f5f5' }}>
+      <Paper elevation={3} style={{ padding: '36px', borderRadius: '10px', backgroundColor: '#fff' }}>
         <Typography variant="h5" sx={{ fontSize: '18px', marginBottom: '16px' }}>
           <FolderOpenIcon sx={{ color: '#00adef', marginRight: '8px' }} />
           Folder Management

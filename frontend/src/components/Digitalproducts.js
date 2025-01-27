@@ -1,118 +1,154 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import LocalAtmRoundedIcon from '@mui/icons-material/LocalAtmRounded'; // Example icon for financial services
-import PhoneIphoneRoundedIcon from '@mui/icons-material/PhoneIphoneRounded'; // Example for mobile app
-import AgricultureIcon from '@mui/icons-material/Agriculture'; // Example for farming-related product
-import AppSettingsAltRoundedIcon from '@mui/icons-material/AppSettingsAltRounded'; // Example for app-related icon
-import BusinessCenterRoundedIcon from '@mui/icons-material/BusinessCenterRounded'; // Example for business-related product
-import ThumbUpAltRoundedIcon from '@mui/icons-material/ThumbUpAltRounded'; // Example for a general product feature
+import React from 'react';
+import { Card, Col, Row, Typography, Space, Avatar } from 'antd';
+import {
+  DollarCircleOutlined,
+  PhoneOutlined,
+  AppstoreOutlined,
+  ShopOutlined,
+  CreditCardOutlined,
+  MobileOutlined,
+} from '@ant-design/icons';
 
-// Replace the old items with your actual product data
+const { Title, Text } = Typography;
+
 const products = [
   {
-    icon: <LocalAtmRoundedIcon />,
+    icon: <DollarCircleOutlined />,
     title: 'Michu Digital Lending',
-    description: 'Michu Digital Lending is an AI-powered platform that enables individuals and businesses to access credit seamlessly through an advanced credit scoring system.',
+    description:
+      'AI-powered platform for seamless credit access.',
   },
   {
-    icon: <PhoneIphoneRoundedIcon />,
+    icon: <PhoneOutlined />,
     title: 'CoopPay eBIRR',
-    description: 'A seamless mobile solution for transferring funds and paying bills with ease.',
+    description: 'Seamless mobile funds transfer and bill payments.',
   },
   {
-    icon: <AgricultureIcon />,
+    icon: <AppstoreOutlined />,
     title: 'ATM Banking Service',
-    description: 'ATM services provide easy access to funds, bill payments, and other banking services through automated teller machines.',
+    description:
+      'Easy access to funds, bill payments, and banking services.',
   },
   {
-    icon: <AppSettingsAltRoundedIcon />,
+    icon: <MobileOutlined />,
     title: 'OMNI CHANNEL',
-    description: 'AOmni Channel is a platform that integrates multiple channels (mobile, web, and others) into one seamless service for individuals and businesses..',
+    description:
+      'Integrated mobile, web, and other channels into one service.',
   },
   {
-    icon: <BusinessCenterRoundedIcon />,
+    icon: <ShopOutlined />,
     title: 'Web Pay',
-    description: 'Web Pay is an innovative e-commerce platform offering hosted and plugin solutions for both businesses and customers.',
+    description:
+      'E-commerce platform offering hosted and plugin solutions.',
   },
   {
-    icon: <ThumbUpAltRoundedIcon />,
+    icon: <CreditCardOutlined />,
     title: 'POS (Point of Sale) Services',
-    description: 'POS systems enable merchants to process card payments seamlessly at retail locations.',
+    description:
+      'Seamless card payment processing at retail locations.',
   },
 ];
 
-export default function DigitalProducts() {
+const DigitalProducts = () => {
   return (
-    <Box
-    id="digital-products"
-    sx={{
-      pt: { xs: 4, sm: 12 },
-      pb: { xs: 8, sm: 16 },
-      color: '#000',
-      
-      bgcolor: '#f4f4f4 ', // Updated background color
-    }}
-  >
-  
-      <Container
-        sx={{
-          position: 'relative',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          minHeight: '30vh',
-          gap: { xs: 3, sm: 6 },
-        }}
-      >
-        <Box
-          sx={{
-            width: { sm: '100%', md: '60%' },
-            textAlign: { sm: 'left', md: 'center' },
+    <div
+      id="digital-products"
+      style={{
+        padding: '40px 16px', // Reduced padding
+        background: '#f5f7fa',
+        minHeight: '100vh',
+        fontFamily: 'Roboto, sans-serif',
+      }}
+    >
+      {/* Header Section */}
+      <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+        <Title
+          level={3} // Smaller title size
+          style={{
+            color: '#333',
+            fontWeight: 600,
+            letterSpacing: '0.5px',
+            marginBottom: '12px', // Reduced margin
           }}
         >
-          <Typography sx={{color:"#00adef"}} component="h2" variant="h4" gutterBottom>
-            Digital Products
-          </Typography>
-          <Typography variant="body1" sx={{ color: '#000' ,fontWeight: 'medium'}}>
-            Explore our range of innovative digital products designed to empower individuals and businesses with
-            seamless, secure, and efficient solutions.
-          </Typography>
-        </Box>
-        <Grid container spacing={2}>
-          {products.map((product, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
-              <Stack
-                direction="column"
-                component={Card}
-                spacing={1}
-                useFlexGap
-                sx={{
-                  color: 'inherit',
-                  p: 3,
-                  height: '100%',
-                  borderColor: 'hsla(220, 25%, 25%, 0.3)',
-                  backgroundColor: '#f4f4f4 ',
+          Our Digital Products
+        </Title>
+        <Text style={{ fontSize: '16px', color: '#888' }}>
+          Discover products designed to streamline services for businesses and individuals.
+        </Text>
+      </div>
+
+      {/* Product Grid */}
+      <Row gutter={[16, 24]} justify="center">
+        {products.map((product, index) => (
+          <Col xs={24} sm={12} md={8} lg={6} key={index}>
+            <Card
+              hoverable
+              style={{
+                borderRadius: '12px', // Smaller border radius
+                boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+                background: '#fff',
+                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                padding: '16px', // Reduced padding inside the card
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-6px)';
+                e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.15)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+              }}
+            >
+              <Space
+                direction="vertical"
+                size="small"
+                style={{
+                  textAlign: 'center',
+                  display: 'flex',
+                  alignItems: 'center',
                 }}
               >
-                <Box sx={{ opacity: '50%' }}>{product.icon}</Box>
-                <div>
-                  <Typography gutterBottom sx={{ fontWeight: 'medium' }}>
-                    {product.title}
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: '#000' }}>
-                    {product.description}
-                  </Typography>
-                </div>
-              </Stack>
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
-    </Box>
+                {/* Icon Avatar */}
+                <Avatar
+                  size={60} // Smaller avatar size
+                  style={{
+                    backgroundColor: '#0078d4',
+                    color: '#fff',
+                    fontSize: '28px', // Smaller icon size
+                    padding: '12px',
+                  }}
+                  icon={product.icon}
+                />
+                <Title
+                  level={5} // Smaller title size
+                  style={{
+                    marginTop: '8px', // Reduced margin
+                    color: '#333',
+                    fontWeight: 600,
+                    fontSize: '16px', // Smaller title font size
+                  }}
+                >
+                  {product.title}
+                </Title>
+                <Text
+                  style={{
+                    color: '#555',
+                    fontSize: '12px', // Smaller description text
+                    lineHeight: '1.4',
+                    maxWidth: '220px',
+                    wordWrap: 'break-word',
+                  }}
+                >
+                  {product.description}
+                </Text>
+              </Space>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+    </div>
   );
-}
+};
+
+export default DigitalProducts;

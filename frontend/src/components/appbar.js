@@ -184,18 +184,18 @@ export default function AppAppBar() {
         </StyledToolbar>
       </Container>
 
-      {/* PDF Dialog */}
+     
       <Dialog
         open={pdfOpen}
         onClose={handleCloseDialog}
-        maxWidth="lg"
+        maxWidth="md"
         fullWidth
         PaperProps={{
           style: {
-            backgroundColor: "#f5f5f5", // Dark background for PDF viewer
+           
             color: "#fff", // White text color
-            borderRadius: "10px",
-            boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.5)",
+           
+          
           },
         }}
       >
@@ -205,7 +205,7 @@ export default function AppAppBar() {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              py: 4,
+            
             }}
           >
             {currentPdf && (
