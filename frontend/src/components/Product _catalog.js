@@ -1,43 +1,36 @@
-import React, { useEffect, useState } from "react";
-import {
-  Layout,
-  Menu,
-  Button,
-  Card,
-  Typography,
-  Input,
-  Drawer,
-  Divider,
-  Row,
-  Col,
-  Spin,
-  AutoComplete,
-} from "antd";
+import React, { useState, useEffect } from "react";
+import { Layout, Menu, Drawer, Button, Spin, Input, message } from "antd";
 import {
   MenuOutlined,
-  ZoomInOutlined,
-  ZoomOutOutlined,
+  FolderOpenOutlined,
+  FileOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import { Document, Page } from "react-pdf";
+import { useMediaQuery } from "react-responsive";
 import axios from "axios";
-import { pdfjs } from "react-pdf";
-import { Folder, File } from "lucide-react"; // Import icons from lucide-react
+import PDFViewer from "./pdfviewer";
+import { Link } from "react-router-dom";
+import Logoimage from "../assets/images/bb.png";
+import "antd/dist/reset.css";
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
-
-const { Header, Content, Sider, Footer } = Layout;
+const { Header, Sider, Content, Footer } = Layout;
 const { Search } = Input;
+const { SubMenu } = Menu;
 
 const ProductCatalog2 = () => {
+  const [collapsed, setCollapsed] = useState(false);
+  const [drawerVisible, setDrawerVisible] = useState(false);
   const [folderStructure, setFolderStructure] = useState([]);
-  const [selectedPdf, setSelectedPdf] = useState(null);
-  const [numPages, setNumPages] = useState(null);
-  const [pdfScale, setPdfScale] = useState(1.0);
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [selectedPdf, setSelectedPdf] = useState(null);
+  const [pdfLoading, setPdfLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredFiles, setFilteredFiles] = useState([]);
+  const isMobile = useMediaQuery({ maxWidth: 768 });
+
+  useEffect(() => {
+    fetchFolderStructure();
+  }, []);
 
   const fetchFolderStructure = async () => {
     setLoading(true);
@@ -47,100 +40,90 @@ const ProductCatalog2 = () => {
       );
       setFolderStructure(response.data);
     } catch (error) {
-      console.error("Error fetching folder structure:", error);
+      message.error("Error fetching folder structure");
+      console.error(error);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchFolderStructure();
-  }, []);
-
-  const getRelativePath = (absolutePath) => {
-    const prefix =
-      "C:\\Users\\coop\\Desktop\\Product catalog\\backend\\uploads\\"; // Adjust according to your backend
-    return absolutePath.replace(prefix, "").replace(/\\/g, "/");
-  };
-
   const handleFileClick = (filePath) => {
-    const relativePath = getRelativePath(filePath);
-    const pathParts = relativePath.split("/");
-    const fileName = pathParts.pop();
+    const normalizedPath = filePath.replace(/\\/g, "/");
+    const pathParts = normalizedPath.split("/");
+    const fileName = pathParts.pop().toLowerCase(); // Convert to lowercase
     const folderPath = pathParts.join("/");
 
     if (folderPath && fileName) {
+      const relativeFolderPath = folderPath.replace(/^.*\/uploads\//, "");
       const pdfUrl = `http://localhost:5000/api/files/view-pdf?folderPath=${encodeURIComponent(
-        folderPath
+        relativeFolderPath
       )}&fileName=${encodeURIComponent(fileName)}`;
-      setSelectedPdf(pdfUrl);
+
+      setPdfLoading(true);
+      axios
+        .get(pdfUrl, { responseType: "blob" })
+        .then((response) => {
+          const pdfBlob = URL.createObjectURL(response.data);
+          setSelectedPdf(pdfBlob);
+        })
+        .catch((error) => {
+          message.error("Error loading PDF");
+          console.error(error);
+        })
+        .finally(() => {
+          setPdfLoading(false);
+        });
     }
   };
 
-  const onDocumentLoadSuccess = ({ numPages }) => setNumPages(numPages);
-
-  const handleSearchChange = (value) => {
-    setSearchQuery(value);
-    if (value) {
-      const files = searchFiles(value);
-      setFilteredFiles(files);
-    } else {
-      setFilteredFiles([]);
-    }
-  };
-
-  const searchFiles = (query) => {
-    const allFiles = getAllFiles(folderStructure);
-    return allFiles.filter((file) =>
-      file.name.toLowerCase().includes(query.toLowerCase())
-    );
-  };
-
-  const getAllFiles = (structure) => {
+  const getAllFiles = (items) => {
     let files = [];
-    const extractFiles = (folders) => {
-      folders.forEach((folder) => {
-        if (folder.type === "file") {
-          files.push(folder);
-        }
-        if (folder.children) {
-          extractFiles(folder.children);
-        }
-      });
-    };
-    extractFiles(structure);
+    items.forEach((item) => {
+      if (item.type === "file") {
+        files.push({ ...item, name: item.name.toLowerCase() }); // Normalize to lowercase
+      }
+      if (item.children) {
+        files = [...files, ...getAllFiles(item.children)];
+      }
+    });
     return files;
   };
 
-  const formatFileName = (name) => {
-    return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+  const searchFiles = (query) => {
+    if (!query) return [];
+    const allFiles = getAllFiles(folderStructure);
+    return allFiles.filter((file) => file.name.includes(query.toLowerCase()));
+  };
+
+  const handleSearchChange = (value) => {
+    setSearchQuery(value);
+    setFilteredFiles(value ? searchFiles(value) : []);
   };
 
   const renderFolderItems = (items) => {
     return items.map((item) => {
-      const formattedName = formatFileName(item.name);
-
       if (item.type === "folder") {
         return (
-          <Menu.SubMenu
-            key={item.name}
+          <SubMenu
+            key={item.name.toLowerCase()}
             title={
               <span>
-                <Folder size={20} style={{ marginRight: 8 }} />
-                {formattedName}
+                <FolderOpenOutlined style={{ marginRight: 8 }} />
+                {item.name}
               </span>
             }
           >
             {item.children && renderFolderItems(item.children)}
-          </Menu.SubMenu>
+          </SubMenu>
         );
       } else if (item.type === "file") {
         return (
-          <Menu.Item key={item.name} onClick={() => handleFileClick(item.path)}>
-            <span>
-              <File size={18} style={{ marginRight: 10 }} />
-              {formattedName}
-            </span>
+          <Menu.Item
+            key={item.name.toLowerCase()}
+            onClick={() => handleFileClick(item.path)}
+          >
+            <FileOutlined style={{ marginRight: 10 }} />
+            {item.name.toLowerCase()}
           </Menu.Item>
         );
       }
@@ -148,170 +131,133 @@ const ProductCatalog2 = () => {
     });
   };
 
-  const drawerContent = (
-    <div style={{ padding: "10px" }}>
-      <Divider />
-      <Search
-        placeholder="Search"
-        value={searchQuery}
-        onChange={(e) => handleSearchChange(e.target.value)}
-        enterButton
-        allowClear
-        prefix={<SearchOutlined />}
-        style={{
-          borderRadius: "8px",
-          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-          marginBottom: "15px",
-        }}
-      />
-      <Menu mode="inline" style={{ marginTop: "10px" }}>
-        {renderFolderItems(
-          filteredFiles.length > 0 ? filteredFiles : folderStructure
-        )}
-      </Menu>
-    </div>
-  );
-
-  const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
-
-  const zoomIn = () => setPdfScale(pdfScale + 0.1);
-  const zoomOut = () => setPdfScale(pdfScale - 0.1);
+  const renderFilteredFiles = (files) => {
+    return files.map((file) => (
+      <Menu.Item key={file.name} onClick={() => handleFileClick(file.path)}>
+        <FileOutlined style={{ marginRight: 10 }} />
+        {file.name}
+      </Menu.Item>
+    ));
+  };
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Header
-        style={{
-          backgroundColor: "#001529",
-          padding: "0 16px",
-          boxShadow: "0 2px 8px rgba(205, 207, 208, 0.1)",
-        }}
-      >
-        <Row justify="space-between" align="middle">
-          <Col>
-            <Button
-              onClick={handleDrawerToggle}
-              style={{
-                fontSize: "1.2rem",
-                border: "none",
-                color: "#fff",
-              }}
-              icon={<MenuOutlined />}
-              tooltip="Open Drawer"
-            />
-          </Col>
-          <Col>
-            <Typography.Title level={4} style={{ color: "#fff", margin: 0 }}>
-              Product Viewer
-            </Typography.Title>
-          </Col>
-        </Row>
-      </Header>
-
-      <Layout>
-        <Sider
-          width={400}
-          style={{
-            background: "#f4f4f4",
-            overflow: "auto",
-            height: "100vh",
-            position: "fixed",
-            left: 0,
-            top: 0,
-            boxShadow: "2px 0 8px rgba(0, 0, 0, 0.1)",
-          }}
-          collapsible
-          collapsedWidth={0} // Ensures zero-width when collapsed
-          breakpoint="lg"
-          trigger={null}
-          collapsed={mobileOpen}
+      {isMobile ? (
+        <Drawer
+          title="Menu"
+          placement="left"
+          onClose={() => setDrawerVisible(false)}
+          open={drawerVisible}
+          width={250}
         >
-          {drawerContent}
-        </Sider>
-
-        <Layout
-          style={{
-            marginLeft: mobileOpen ? 0 : 400, // Keep the margin adjustment
-            padding: "16px",
-            transition: "margin-left 0.2s ease",
-            width: "100%", // Ensure content takes full width
-          }}
-        >
-          <Card
-            style={{
-              width: "100%", // Adjust to take full width
-              maxWidth: mobileOpen ? "100%" : "70%", // Limit width on desktop
-              marginLeft: mobileOpen ? 0 : 100,
-              borderRadius: "10px",
-              maxHeight: "100%",
-              padding: "20px",
-            }}
-          >
+          <Search
+            placeholder="Search files"
+            value={searchQuery}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            prefix={<SearchOutlined />}
+            style={{ marginBottom: "10px" }}
+          />
+          <Menu mode="inline">
             {loading ? (
-              <Spin size="medium" />
-            ) : !selectedPdf ? (
-              <Typography.Text>
-                Select a PDF to view from the folder.
-              </Typography.Text>
+              <Spin />
+            ) : searchQuery ? (
+              renderFilteredFiles(filteredFiles)
             ) : (
-              <>
-                <Row justify="space-between" style={{ marginBottom: "10px" }}>
-                  <Col>
-                    <Button
-                      onClick={zoomOut}
-                      style={{
-                        marginRight: "8px",
-                        backgroundColor: "#00adef",
-                        color: "#fff",
-                        borderRadius: "4px",
-                        padding: "6px 12px",
-                      }}
-                    >
-                      <ZoomOutOutlined />
-                    </Button>
-                    <Button
-                      onClick={zoomIn}
-                      style={{
-                        backgroundColor: "#00adef",
-                        color: "#fff",
-                        borderRadius: "4px",
-                        padding: "6px 12px",
-                      }}
-                    >
-                      <ZoomInOutlined />
-                    </Button>
-                  </Col>
-                </Row>
-                <Document
-                  file={selectedPdf}
-                  onLoadSuccess={onDocumentLoadSuccess}
-                  loading={<Typography>Loading PDF...</Typography>}
-                >
-                  {Array.from(new Array(numPages), (el, index) => (
-                    <Page
-                      key={`page_${index + 1}`}
-                      pageNumber={index + 1}
-                      scale={pdfScale}
-                      renderAnnotationLayer={false}
-                      renderTextLayer={false}
-                    />
-                  ))}
-                </Document>
-              </>
+              renderFolderItems(folderStructure)
             )}
-          </Card>
+          </Menu>
+        </Drawer>
+      ) : (
+        <Sider
+          collapsible
+          collapsed={collapsed}
+          onCollapse={setCollapsed}
+          width={350}
+          style={{
+            background: "#fff",
+            height: "100vh",
+            overflowY: "auto",
+            transition: "width 0.3s",
+          }}
+        >
+          <div style={{ textAlign: "center", padding: "10px" }}>
+            <Link to="/">
+              <img
+                src={Logoimage}
+                alt="Logo"
+                style={{ width: collapsed ? 40 : 60, transition: "0.3s" }}
+              />
+            </Link>
+          </div>
+          <Search
+            placeholder="Search Products"
+            value={searchQuery}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            prefix={<SearchOutlined />}
+            style={{ marginLeft: "30px", width: "80%" }}
+          />
+          <Menu mode="inline">
+            {loading ? (
+              <Spin />
+            ) : searchQuery ? (
+              renderFilteredFiles(filteredFiles)
+            ) : (
+              renderFolderItems(folderStructure)
+            )}
+          </Menu>
+        </Sider>
+      )}
+      <Layout>
+        <Header
+          style={{
+            background: "#fff",
+            display: "flex",
+            alignItems: "center",
+            padding: "0 16px",
+            position: "sticky",
+            top: 0,
+            zIndex: 1000,
+          }}
+        >
+          {isMobile && (
+            <Button
+              type="text"
+              icon={<MenuOutlined />}
+              onClick={() => setDrawerVisible(true)}
+              style={{ marginRight: 16 }}
+            />
+          )}
+          <h3 style={{ flex: 1, textAlign: "center" }}>Product Catalog</h3>
+        </Header>
+        <Content
+          style={{
+            margin: "8px",
+            padding: 24,
+            background: "#fff",
+            flexGrow: 1,
+            height: "100vh",
+          }}
+        >
+          {pdfLoading ? (
+            <Spin />
+          ) : selectedPdf ? (
+            <PDFViewer file={selectedPdf} />
+          ) : (
+            <p>Select a file to view.</p>
+          )}
+        </Content>
 
-          <Footer
-            style={{
-              textAlign: "center",
-              padding: "20px",
-              background: "#f4f4f4",
-              marginTop: "16px",
-              borderTop: "1px solid #e8e8e8",
-            }}
-          >
-            Documentation Viewer ©2025 | Built with 💻
-          </Footer>
-        </Layout>
+        <Footer
+          style={{
+            textAlign: "center",
+            background: "#fff",
+            padding: "16px 0",
+            borderTop: "1px solid #ddd",
+          }}
+        >
+          &copy; {new Date().getFullYear()} Your Company Name. All rights
+          reserved.
+        </Footer>
       </Layout>
     </Layout>
   );

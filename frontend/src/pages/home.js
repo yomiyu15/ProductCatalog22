@@ -5,7 +5,7 @@ import AppAppBar from '../components/appbar';
 import Hero from '../components/hero';
 import Footer from '../components/footer';
 import AppTheme from '../shared-theme/apptheme';
-import Testimonials from '../components/Products';
+
 import FAQ from '../components/faq';
 
 import Highlights from '../components/Digitalproducts';
@@ -19,11 +19,11 @@ export default function HomePage(props) {
       <CssBaseline enableColorScheme />
       <AppAppBar />
       <Hero/>
-      <Testimonials />
+    
       <Divider />
-        <Highlights />
+     <Highlights />
        
-        <Divider />
+       <Divider />
         <FAQ />
         <Divider />
        

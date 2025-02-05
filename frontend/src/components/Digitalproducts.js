@@ -1,74 +1,103 @@
-import React from 'react';
-import { Card, Col, Row, Typography, Space, Avatar } from 'antd';
-import {
-  DollarCircleOutlined,
-  PhoneOutlined,
-  AppstoreOutlined,
-  ShopOutlined,
-  CreditCardOutlined,
-  MobileOutlined,
-} from '@ant-design/icons';
+import React, { useState } from 'react';
+import { Card, Col, Row, Typography, Space, Pagination } from 'antd';
+import img1 from "../assets/michu.jpeg";
+import img2 from "../assets/ebirr.jpeg";
+import img3 from "../assets/coopapp.png";
+import img4 from "../assets/crm.jpeg";
 
 const { Title, Text } = Typography;
 
 const products = [
   {
-    icon: <DollarCircleOutlined />,
     title: 'Michu Digital Lending',
-    description:
-      'AI-powered platform for seamless credit access.',
+    description: 'AI-powered platform for seamless credit access.',
+    imageUrl: img1,
   },
   {
-    icon: <PhoneOutlined />,
     title: 'CoopPay eBIRR',
     description: 'Seamless mobile funds transfer and bill payments.',
+    imageUrl: img2,
   },
   {
-    icon: <AppstoreOutlined />,
     title: 'ATM Banking Service',
-    description:
-      'Easy access to funds, bill payments, and banking services.',
+    description: 'Easy access to funds, bill payments, and banking services.',
+    imageUrl: img4,
   },
   {
-    icon: <MobileOutlined />,
     title: 'OMNI CHANNEL',
-    description:
-      'Integrated mobile, web, and other channels into one service.',
+    description: 'Integrated mobile, web, and other channels into one service.',
+    imageUrl: img3,
   },
   {
-    icon: <ShopOutlined />,
     title: 'Web Pay',
-    description:
-      'E-commerce platform offering hosted and plugin solutions.',
+    description: 'E-commerce platform offering hosted and plugin solutions.',
+    imageUrl: '/images/web-pay.png',
   },
   {
-    icon: <CreditCardOutlined />,
     title: 'POS (Point of Sale) Services',
-    description:
-      'Seamless card payment processing at retail locations.',
+    description: 'Seamless card payment processing at retail locations.',
+    imageUrl: '/images/pos-services.png',
+  },
+  {
+    title: 'Product 7',
+    description: 'Description of product 7.',
+    imageUrl: '/images/product7.png',
+  },
+  {
+    title: 'Product 8',
+    description: 'Description of product 8.',
+    imageUrl: '/images/product8.png',
+  },
+  {
+    title: 'Product 9',
+    description: 'Description of product 9.',
+    imageUrl: '/images/product9.png',
+  },
+  {
+    title: 'Product 10',
+    description: 'Description of product 10.',
+    imageUrl: '/images/product10.png',
+  },
+  {
+    title: 'Product 11',
+    description: 'Description of product 11.',
+    imageUrl: '/images/product11.png',
   },
 ];
 
 const DigitalProducts = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 3; // Number of products to display per page
+
+  const startIndex = (currentPage - 1) * productsPerPage;
+  const endIndex = startIndex + productsPerPage;
+
+  const currentProducts = products.slice(startIndex, endIndex);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   return (
     <div
       id="digital-products"
       style={{
-        padding: '40px 16px', // Reduced padding
-        background: '#f5f7fa',
+        padding: '40px 16px',
         minHeight: '100vh',
         fontFamily: 'Roboto, sans-serif',
+    
       }}
     >
       {/* Header Section */}
       <div style={{ textAlign: 'center', marginBottom: '40px' }}>
         <Title
-          level={3} // Smaller title size
+          level={3}
           style={{
-            color: '#333',
-            fontWeight: 600,
+            color: '#00adef',
+            fontWeight: 500,
             letterSpacing: '0.5px',
-            marginBottom: '12px', // Reduced margin
+            marginBottom: '12px',
+            fontSize: '24px', // Slightly larger title for prominence
           }}
         >
           Our Digital Products
@@ -79,26 +108,26 @@ const DigitalProducts = () => {
       </div>
 
       {/* Product Grid */}
-      <Row gutter={[16, 24]} justify="center">
-        {products.map((product, index) => (
+      <Row gutter={[24, 24]} justify="center">
+        {currentProducts.map((product, index) => (
           <Col xs={24} sm={12} md={8} lg={6} key={index}>
             <Card
               hoverable
               style={{
-                borderRadius: '12px', // Smaller border radius
-                boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+                borderRadius: '16px',
+                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.1)',
                 background: '#fff',
                 transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                padding: '16px', // Reduced padding inside the card
+                padding: '20px',
+                margin: '10px',
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-6px)';
-                e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.15)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
-              }}
+              bodyStyle={{ padding: 0 }}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
             >
               <Space
                 direction="vertical"
@@ -107,26 +136,34 @@ const DigitalProducts = () => {
                   textAlign: 'center',
                   display: 'flex',
                   alignItems: 'center',
+                  height: '100%',
                 }}
               >
-                {/* Icon Avatar */}
-                <Avatar
-                  size={60} // Smaller avatar size
-                  style={{
-                    backgroundColor: '#0078d4',
-                    color: '#fff',
-                    fontSize: '28px', // Smaller icon size
-                    padding: '12px',
-                  }}
-                  icon={product.icon}
-                />
+                {/* Image with hover effect */}
+                {product.imageUrl && (
+                  <img
+                    src={product.imageUrl}
+                    alt={product.title}
+                    style={{
+                      width: '150px',
+                      height: '150px',
+                      borderRadius: '12px',
+                      objectFit: 'cover',
+                      transition: 'transform 0.3s ease',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.1)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+                  />
+                )}
+
                 <Title
-                  level={5} // Smaller title size
+                  level={5}
                   style={{
-                    marginTop: '8px', // Reduced margin
+                    marginTop: '16px',
                     color: '#333',
                     fontWeight: 600,
-                    fontSize: '16px', // Smaller title font size
+                    fontSize: '18px',
+                   // Added text transform for modern touch
                   }}
                 >
                   {product.title}
@@ -134,10 +171,12 @@ const DigitalProducts = () => {
                 <Text
                   style={{
                     color: '#555',
-                    fontSize: '12px', // Smaller description text
-                    lineHeight: '1.4',
-                    maxWidth: '220px',
+                    fontSize: '14px',
+                    lineHeight: '1.6',
+                    maxWidth: '240px',
                     wordWrap: 'break-word',
+                    fontStyle: 'italic',
+                    textAlign: 'center', // Centered text for modern look
                   }}
                 >
                   {product.description}
@@ -147,6 +186,18 @@ const DigitalProducts = () => {
           </Col>
         ))}
       </Row>
+
+      {/* Pagination */}
+      <div style={{ textAlign: 'center', marginTop: '40px' }}>
+        <Pagination
+          current={currentPage}
+          total={products.length}
+          pageSize={productsPerPage}
+          onChange={handlePageChange}
+          showSizeChanger={false}
+          style={{ display: 'inline-block', marginTop: '20px' }}
+        />
+      </div>
     </div>
   );
 };

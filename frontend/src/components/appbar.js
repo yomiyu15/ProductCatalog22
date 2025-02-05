@@ -4,12 +4,9 @@ import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import { debounce } from "lodash";
-import axios from "axios";
 import { Document, Page } from "react-pdf";
 import Sitemark from "./logo1";
 import ColorModeIconDropdown from "../shared-theme/ColorModeIconDropdown";
@@ -33,41 +30,13 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 }));
 
 export default function AppAppBar() {
-  const [open, setOpen] = React.useState(false);
-  const [searchQuery, setSearchQuery] = React.useState("");
-  const [filteredFiles, setFilteredFiles] = React.useState([]);
-  const [files, setFiles] = React.useState([]);
   const [pdfOpen, setPdfOpen] = React.useState(false);
   const [currentPdf, setCurrentPdf] = React.useState(null);
-
-  React.useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/files/list-all-files")
-      .then((response) => {
-        setFiles(response.data);
-        setFilteredFiles(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching files:", error);
-      });
-  }, []);
 
   const handleFileClick = (viewUrl) => {
     setCurrentPdf(viewUrl);
     setPdfOpen(true);
   };
-
-  const handleSearch = debounce((query) => {
-    setSearchQuery(query);
-    if (query) {
-      const results = files.filter((file) =>
-        file.name.toLowerCase().includes(query.toLowerCase())
-      );
-      setFilteredFiles(results);
-    } else {
-      setFilteredFiles(files);
-    }
-  }, 300);
 
   const handleCloseDialog = () => {
     setPdfOpen(false);
@@ -93,9 +62,9 @@ export default function AppAppBar() {
             <Sitemark />
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
               <Link to="/start">
-              <Button variant="text" color="info" size="small">
-                Product Catalog
-              </Button>
+                <Button variant="text" color="info" size="small">
+                  Product Catalog
+                </Button>
               </Link>
               <Button
                 variant="text"
@@ -110,15 +79,14 @@ export default function AppAppBar() {
                 Our Products
               </Button>
 
-              <Button variant="text" color="info" size="small"  onClick={() =>
+              <Button variant="text" color="info" size="small" onClick={() =>
                   document
                     .getElementById("digital-products")
                     .scrollIntoView({ behavior: "smooth" })
-                }
-              >
+                }>
                 Digital Products
               </Button>
-              
+
               <Button
                 variant="text"
                 color="info"
@@ -141,50 +109,11 @@ export default function AppAppBar() {
               alignItems: "center",
             }}
           >
-            <Box sx={{ position: "relative", width: 200 }}>
-              <TextField
-                variant="outlined"
-                size="small"
-                placeholder="Search files"
-                onChange={(e) => handleSearch(e.target.value)}
-                sx={{ width: "100%" }}
-              />
-
-              {filteredFiles.length > 0 && searchQuery && (
-                <Box
-                  sx={{
-                    position: "absolute",
-                    top: "100%",
-                    left: 0,
-                    width: "100%",
-                    backgroundColor: "white",
-                    boxShadow: 2,
-                    borderRadius: 1,
-                    zIndex: 9999,
-                    maxHeight: 200,
-                    overflowY: "auto",
-                  }}
-                >
-                  {filteredFiles.map((file) => (
-                    <Box key={file.path} sx={{ mb: 1 }}>
-                      <Button
-                        onClick={() => handleFileClick(file.viewUrl)}
-                        variant="text"
-                        sx={{ textAlign: "left", width: "100%" }}
-                      >
-                        {file.name}
-                      </Button>
-                    </Box>
-                  ))}
-                </Box>
-              )}
-            </Box>
             <ColorModeIconDropdown />
           </Box>
         </StyledToolbar>
       </Container>
 
-     
       <Dialog
         open={pdfOpen}
         onClose={handleCloseDialog}
@@ -192,10 +121,7 @@ export default function AppAppBar() {
         fullWidth
         PaperProps={{
           style: {
-           
             color: "#fff", // White text color
-           
-          
           },
         }}
       >
@@ -205,7 +131,6 @@ export default function AppAppBar() {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-            
             }}
           >
             {currentPdf && (
