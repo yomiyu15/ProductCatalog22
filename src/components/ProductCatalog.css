@@ -1,0 +1,123 @@
+.product-catalog {
+    transition: background 0.3s ease;
+  }
+  
+  .product-catalog.light {
+    background: #f8f9fa;
+  }
+  
+  .product-catalog.dark {
+    background: #1a1a1a;
+  }
+  
+  .sidebar {
+    height: 100vh;
+    position: fixed;
+    overflow-y: auto;
+    transition: all 0.3s ease;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .sidebar-header {
+    padding: 16px;
+    background: inherit;
+    border-bottom: 1px solid #e8e8e8;
+  }
+  
+  .search-bar {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+  
+  .header {
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+  }
+  
+  .product-catalog.dark .header {
+    background-color: #1f1f1f;
+  }
+  
+  .logo-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo {
+    width: 60px;
+    height: 60px;
+    margin-right: 12px;
+  }
+  
+  .logo-text {
+    font-size: 16px;
+    font-weight: 600;
+    color:#333;
+  }
+  
+  .content {
+    margin: 24px;
+    padding: 24px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .product-catalog.dark .content {
+    background: #2a2a2a;
+  }
+  
+  .breadcrumb {
+    margin-bottom: 16px;
+  }
+  
+  .file-metadata {
+    margin-bottom: 16px;
+  }
+  
+  .loading-spinner {
+    text-align: center;
+    padding: 40px;
+  }
+  
+  .pdf-viewer-container {
+    flex: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f8f9fa;
+  }
+  
+  .placeholder-text {
+    text-align: center;
+    font-size: 16px;
+    color: #aaa;
+  }
+  
+  .footer {
+    text-align: center;
+    padding: 16px;
+    background: inherit;
+    border-top: 1px solid #e8e8e8;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  @media (max-width: 768px) {
+    .sidebar {
+      display: none;
+    }
+    .main-content {
+      margin-left: 0 !important;
+    }
+    .header {
+      padding: 0 16px;
+    }
+  }

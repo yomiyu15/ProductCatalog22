@@ -21,11 +21,7 @@ const PdfViewer = ({ file }) => {
         />
       </Worker>
 
-      <div style={{ position: "absolute", bottom: 10, left: "50%", transform: "translateX(-50%)" }}>
-        <button onClick={() => setPageNumber(Math.max(pageNumber - 1, 1))}>Prev</button>
-        <span>{`Page ${pageNumber} of ${numPages}`}</span>
-        <button onClick={() => setPageNumber(Math.min(pageNumber + 1, numPages))}>Next</button>
-      </div>
+     
     </div>
   );
 };

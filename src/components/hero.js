@@ -73,7 +73,7 @@ export default function Hero() {
             }}
           >
             <Typography variant="h3" fontWeight="bold" sx={{ color: '#333' }}>
-              Explore Our Product Catalog
+              Explore Sector Knowledge
             </Typography>
             <Typography variant="body1" sx={{ maxWidth: '500px', marginBottom: '1.5rem', color: '#555' }}>
               Discover an array of innovative banking solutions crafted with care. Our dynamic documentation template, built with React.js, ensures a seamless and responsive experience tailored to meet your project needs.

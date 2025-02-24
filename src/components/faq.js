@@ -1,22 +1,13 @@
-import * as React from 'react';
-import Accordion from '@mui/material/Accordion';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import React, { useState, useEffect } from 'react';
+import { Collapse, Typography } from 'antd';
+
+const { Panel } = Collapse;
 
 export default function FAQ() {
-  const [expanded, setExpanded] = React.useState(false);
-  const [faqData, setFaqData] = React.useState([]);
-
-  const handleChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-  };
+  const [faqData, setFaqData] = useState([]);
 
   // Fetch FAQ data from the backend
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchFaq = async () => {
       try {
         const response = await fetch('http://localhost:5000/api/faq'); // Adjust if necessary
@@ -31,57 +22,76 @@ export default function FAQ() {
   }, []);
 
   return (
-    <Container
+    <div
       id="faq"
-      sx={{
-        pt: { xs: 4, sm: 12 },
-        pb: { xs: 8, sm: 16 },
-        position: 'relative',
+      style={{
+        paddingTop: '40px',
+        paddingBottom: '60px',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: { xs: 3, sm: 6 },
+        width: '100%',
+        maxWidth: '1200px',
+        margin: '0 auto',
       }}
     >
-      <Typography
-        component="h2"
-        variant="h4"
-        sx={{
+      <Typography.Title
+        level={2}
+        style={{
           color: '#00adef',
-          width: { sm: '100%', md: '60%' },
-          textAlign: { sm: 'left', md: 'center' },
+          textAlign: 'center',
+          marginBottom: '30px', // Slightly more space for better balance
+          fontSize: '24px', // Bigger title for better prominence
+          fontWeight: 600,
         }}
       >
         Frequently Asked Questions
-      </Typography>
-      <Box sx={{ width: '100%' }}>
+      </Typography.Title>
+
+      <Collapse
+        defaultActiveKey={['0']}
+        style={{
+          width: '100%',
+          maxWidth: '100%',
+        }}
+      >
         {faqData.map((faq, index) => (
-          <Accordion
+          <Panel
             key={index}
-            expanded={expanded === `panel${index}`}
-            onChange={handleChange(`panel${index}`)}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls={`panel${index}d-content`}
-              id={`panel${index}d-header`}
-            >
-              <Typography component="h3" variant="subtitle2">
-                {faq.question}
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography
-                variant="body2"
-                gutterBottom
-                sx={{ maxWidth: { sm: '100%', md: '70%' } }}
+            header={
+              <Typography.Text
+                strong
+                style={{
+                  fontSize: '14px', // Slightly larger question text
+                  color: '#333', // Darker color for the question text
+                }}
               >
-                {faq.answer}
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
+                {faq.question}
+              </Typography.Text>
+            }
+            style={{
+              borderRadius: '8px',
+              marginBottom: '12px',
+              border: '1px solid #ddd',
+              background: '#f9f9f9', // Subtle background color for panels
+            }}
+            collapsible
+            showArrow
+          >
+            <Typography.Text
+              style={{
+                display: 'block',
+                padding: '12px 20px', // Added padding for better spacing
+                lineHeight: '1.6',
+                fontSize: '14px',
+                color: '#555', // Slightly lighter text color for the answer
+              }}
+            >
+              {faq.answer}
+            </Typography.Text>
+          </Panel>
         ))}
-      </Box>
-    </Container>
+      </Collapse>
+    </div>
   );
 }

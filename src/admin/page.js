@@ -169,38 +169,40 @@ const FolderManager = () => {
       alert('Error deleting item');
     }
   };
+// Render Folder Structure
+const renderFolderStructure = (folders) => {
+  return folders.map((folder, index) => (
+    <div key={index} style={{ marginLeft: folder.type === 'folder' ? '20px' : '0' }}>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <FolderIcon style={{ color: 'gold', marginRight: '8px' }} />
+        <Typography>{folder.name}</Typography>
 
-  // Render Folder Structure
-  const renderFolderStructure = (folders) => {
-    return folders.map((folder, index) => (
-      <div key={index} style={{ marginLeft: folder.type === 'folder' ? '20px' : '0' }}>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <FolderIcon style={{ color: 'gold', marginRight: '8px' }} />
-          <Typography>{folder.name}</Typography>
-
-          {/* Edit and Delete Icons */}
+        {/* Edit and Delete Icons next to the folder name */}
+        <div style={{ display: 'flex', marginLeft: 'auto', alignItems: 'center' }}>
           <IconButton
             onClick={() => openEditDialog(folder.path, folder.name)} // Trigger edit dialog
-            style={{ marginLeft: 'auto', padding: '4px' }}
+            style={{ padding: '4px' }}
           >
             <EditIcon fontSize="small" style={{ color: '#0073e6' }} />
           </IconButton>
           <IconButton
             onClick={() => openDeleteDialog(folder.path)} // Trigger delete confirmation dialog
-            style={{ marginLeft: '4px', padding: '4px' }}
+            style={{ padding: '4px', marginLeft: '4px' }}
           >
             <DeleteIcon fontSize="small" style={{ color: 'red' }} />
           </IconButton>
         </div>
-
-        {folder.type === 'folder' && folder.children && folder.children.length > 0 && (
-          <div style={{ marginLeft: '20px' }}>
-            {renderFolderStructure(folder.children)}
-          </div>
-        )}
       </div>
-    ));
-  };
+
+      {folder.type === 'folder' && folder.children && folder.children.length > 0 && (
+        <div style={{ marginLeft: '20px' }}>
+          {renderFolderStructure(folder.children)}
+        </div>
+      )}
+    </div>
+  ));
+};
+
 
   return (
     <Grid container spacing={2} style={{ marginTop: '20px' }}> {/* Added marginTop */}

@@ -28,41 +28,7 @@ const products = [
     description: 'Integrated mobile, web, and other channels into one service.',
     imageUrl: img3,
   },
-  {
-    title: 'Web Pay',
-    description: 'E-commerce platform offering hosted and plugin solutions.',
-    imageUrl: '/images/web-pay.png',
-  },
-  {
-    title: 'POS (Point of Sale) Services',
-    description: 'Seamless card payment processing at retail locations.',
-    imageUrl: '/images/pos-services.png',
-  },
-  {
-    title: 'Product 7',
-    description: 'Description of product 7.',
-    imageUrl: '/images/product7.png',
-  },
-  {
-    title: 'Product 8',
-    description: 'Description of product 8.',
-    imageUrl: '/images/product8.png',
-  },
-  {
-    title: 'Product 9',
-    description: 'Description of product 9.',
-    imageUrl: '/images/product9.png',
-  },
-  {
-    title: 'Product 10',
-    description: 'Description of product 10.',
-    imageUrl: '/images/product10.png',
-  },
-  {
-    title: 'Product 11',
-    description: 'Description of product 11.',
-    imageUrl: '/images/product11.png',
-  },
+  // Additional products...
 ];
 
 const DigitalProducts = () => {
@@ -82,10 +48,10 @@ const DigitalProducts = () => {
     <div
       id="digital-products"
       style={{
-        padding: '40px 16px',
+        padding: '60px 16px',
         minHeight: '100vh',
-        fontFamily: 'Roboto, sans-serif',
-    
+        backgroundColor: '#f5f5f5',
+        fontFamily: 'Poppins, sans-serif',
       }}
     >
       {/* Header Section */}
@@ -93,29 +59,29 @@ const DigitalProducts = () => {
         <Title
           level={3}
           style={{
-            color: '#00adef',
-            fontWeight: 500,
-            letterSpacing: '0.5px',
-            marginBottom: '12px',
-            fontSize: '24px', // Slightly larger title for prominence
+            color: '#00adef', 
+            fontWeight: 600, 
+            letterSpacing: '0.5px', 
+            marginBottom: '12px', 
+            fontSize: '24px',
           }}
         >
           Our Digital Products
         </Title>
-        <Text style={{ fontSize: '16px', color: '#888' }}>
-          Discover products designed to streamline services for businesses and individuals.
+        <Text style={{ fontSize: '16px', color: '#555' }}>
+          Discover innovative products that streamline services for businesses and individuals.
         </Text>
       </div>
 
       {/* Product Grid */}
-      <Row gutter={[24, 24]} justify="center">
+      <Row gutter={[32, 32]} justify="center">
         {currentProducts.map((product, index) => (
           <Col xs={24} sm={12} md={8} lg={6} key={index}>
             <Card
               hoverable
               style={{
-                borderRadius: '16px',
-                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.1)',
+                borderRadius: '12px',
+                boxShadow: '0 8px 20px rgba(0, 0, 0, 0.1)',
                 background: '#fff',
                 transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                 padding: '20px',
@@ -145,8 +111,8 @@ const DigitalProducts = () => {
                     src={product.imageUrl}
                     alt={product.title}
                     style={{
-                      width: '150px',
-                      height: '150px',
+                      width: '160px',
+                      height: '160px',
                       borderRadius: '12px',
                       objectFit: 'cover',
                       transition: 'transform 0.3s ease',
@@ -163,20 +129,20 @@ const DigitalProducts = () => {
                     color: '#333',
                     fontWeight: 600,
                     fontSize: '18px',
-                   // Added text transform for modern touch
+                    textTransform: 'uppercase', // Modern touch
                   }}
                 >
                   {product.title}
                 </Title>
                 <Text
                   style={{
-                    color: '#555',
+                    color: '#777',
                     fontSize: '14px',
                     lineHeight: '1.6',
                     maxWidth: '240px',
-                    wordWrap: 'break-word',
                     fontStyle: 'italic',
-                    textAlign: 'center', // Centered text for modern look
+                    textAlign: 'center',
+                    padding: '0 8px',
                   }}
                 >
                   {product.description}
